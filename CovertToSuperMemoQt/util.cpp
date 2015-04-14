@@ -13,7 +13,7 @@ Util::~Util()
 
 }
 
-bool Util::covertToSuperMemo(const QString &fromFile, const QString &toFile)
+bool Util::covertToSuperMemo(const QString &fromFile, const QString &toFile, QProgressBar *bar, QLabel* label)
 {
     QFile outFile;
     outFile.setFileName(toFile);
@@ -22,33 +22,47 @@ bool Util::covertToSuperMemo(const QString &fromFile, const QString &toFile)
         return false;
     }
     QTextStream outStream(&outFile);
+    outStream.setCodec("UTF-8");
 
     QStringList wordList = getSourceWordList(fromFile);
+    if (bar) bar->setRange(0, wordList.size());
+
     int index = 0;
     foreach (QString word, wordList) {
         index++;
         qDebug() <<index<< ": get word -> " << word;
         WordInfo wordInfo = Shanbay::instance()->getWordInfo(word);
+
+        if (bar) bar->setValue(index);
+        if (label) label->setText(word);
+
         /*
          * write word info with Q&A format which supermemo can import
          *
          *
          *
          */
-        QString pron = "[ " +wordInfo.pron + " ]";
 
-        QString question_head = "Q:";
-        QString answer_head = "A:";
+        QString question_head = "Q: ";
+        QString answer_head = "A: ";
         QString br = "<br/>";
 
+        QString pron = " [ " +wordInfo.pron + " ] ";
+        QString cn = wordInfo.cn;
+        QStringList cnList = cn.split("\n");
+
         QString question = question_head + wordInfo.word;
-        outStream << question <<endl;
+        outStream << question +"\r"<<endl;
 
         QString answer_pron = answer_head + pron + br;
-        QString answer_cn = answer_head + wordInfo.cn + br;
-        outStream << answer_pron << endl;
-        outStream << answer_cn << endl;
-        outStream << endl;
+        outStream << answer_pron <<"\r"<< endl;
+
+        foreach (QString onecn, cnList) {
+            QString oneAnswer = answer_head + onecn + br;
+            outStream << oneAnswer <<"\r"<< endl;
+        }
+
+        outStream << "\r"<<endl;
 
 
         /*

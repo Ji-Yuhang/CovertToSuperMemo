@@ -19,8 +19,7 @@ int main(int argc, char *argv[])
         toFile = argus[2];
 
     }
-    if (!fromFile.isEmpty())
-        Util::covertToSuperMemo(fromFile, toFile);
+//    if (!fromFile.isEmpty()) Util::covertToSuperMemo(fromFile, toFile);
 
     return a.exec();
 }

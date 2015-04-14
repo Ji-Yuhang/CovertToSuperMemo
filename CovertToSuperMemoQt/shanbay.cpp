@@ -2,6 +2,7 @@
 #include <QEventLoop>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QSslConfiguration>
 #include <assert.h>
 #include "json.h"
 Shanbay* Shanbay::g_shanbay_ = 0;
@@ -35,7 +36,11 @@ WordInfo Shanbay::getWordInfo(const QString &word)
 //    request.setHeader(QNetworkRequest::ContentTypeHeader,"application/json");
 //    request.setRawHeader("Cache-Control","no-store");
 //    request.setRawHeader("Pragma","no-cache");
+    QSslConfiguration config;
 
+    config.setPeerVerifyMode(QSslSocket::VerifyNone);
+    config.setProtocol(QSsl::TlsV1);
+    request.setSslConfiguration(config);
 
     QNetworkReply* reply = netManager_.get(request);
     QEventLoop loop;

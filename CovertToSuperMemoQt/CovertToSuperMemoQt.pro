@@ -24,3 +24,7 @@ HEADERS  += mainwindow.h \
     json.h
 
 FORMS    += mainwindow.ui
+
+win32 {
+#    LIBS += -lshell32
+}
