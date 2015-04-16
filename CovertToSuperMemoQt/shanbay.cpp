@@ -47,12 +47,14 @@ WordInfo Shanbay::getWordInfo(const QString &word)
     connect(reply, SIGNAL(readyRead()), &loop, SLOT(quit()));
     loop.exec(QEventLoop::ExcludeUserInputEvents);
     QByteArray json = reply->readAll();
-    QtJson::JsonObject obj = QtJson::parse(json).toMap();
+    QtJson::JsonObject obj = QtJson::parse(QString::fromUtf8(json)).toMap();
     QtJson::JsonObject data = obj["data"].toMap();
     wordInfo.cn = data["definition"].toString();
     wordInfo.en = data["en_definition"].toString();
     wordInfo.word = data["content"].toString();
     wordInfo.pron = data["pron"].toString();
+    qDebug() << wordInfo.pron << wordInfo.pron.toUtf8().toHex();
+    wordInfo.audio = data["us_audio"].toString();
 
     return wordInfo;
 }

@@ -130,8 +130,10 @@ void MainWindow::on_pushButton_clicked()
     ui->currentWord->show();
 
     QString date = QDateTime::currentDateTime().toString("yyyyMMddhhmmss");
-    toFile_ = "SuperMemo" + date +".txt";
-    Util::covertToSuperMemo(fromFile, toFile_, ui->progressBar,ui->currentWord);
+    toFile_ = "SuperMemo" + date +".xml";
+    Util::covertToSuperMemoXML(fromFile, toFile_, ui->progressBar,ui->currentWord);
+//    Util::covertToSuperMemo(fromFile, toFile_, ui->progressBar,ui->currentWord);
+
     ui->progressBar->hide();
     ui->currentWord->hide();
     ui->label_2->show();
