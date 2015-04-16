@@ -27,4 +27,8 @@ FORMS    += mainwindow.ui
 
 win32 {
 #    LIBS += -lshell32
+RC_FILE = CovertToSuperMemoQt.rc
 }
+
+DISTFILES += \
+    CovertToSuperMemoQt.rc
