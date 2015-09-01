@@ -12,6 +12,8 @@
 #include <QNetworkReply>
 #include <QEventLoop>
 #include <QDir>
+#include "collins.h"
+#include <QDebug>
 Util::Util(QObject *parent) : QObject(parent)
 {
 
@@ -131,6 +133,7 @@ bool Util::covertToSuperMemoXML(const QString &fromFile, const QString &toFile, 
 
 
 
+    int iid = 0;
     for (int i = 0; i < count - 1; ++i) {
         QString word = wordList[i];
         qDebug() <<i<< ": get word -> " << word;
@@ -146,107 +149,111 @@ bool Util::covertToSuperMemoXML(const QString &fromFile, const QString &toFile, 
          *
          *
          */
-        QString question = wordInfo.word;
-        QString answer;
+        QList<CollinsInfo> collinsInfoList = COLLINS->zhCollins(word);
+        Q_FOREACH(CollinsInfo collinsInfo, collinsInfoList) {
+            QString question = collinsInfo.sentences.replace(word,"<FONT color=#ff0000\"><STRONG>"+word+"</STRONG></FONT>");
+            QString answer;
 
-        QString question_head = "Q: ";
-        QString answer_head = "";
-        QString br = "<br/>";
+            QString question_head = "Q: ";
+            QString answer_head = "";
+            QString br = "<br/>";
 
-//        QString pron = " [ " +wordInfo.pron + " ] ";
-        const ushort * utf16 = wordInfo.pron.utf16();
-        QString utf16pron;
-        for (int j = 0; j < wordInfo.pron.size(); ++j){
-            ushort ch = *(utf16+j);
-            QString temp = "&#";
-            temp += QString::number(ch);
-            temp += ";";
-            utf16pron += temp;
-            qDebug()<<temp;
+            //        QString pron = " [ " +wordInfo.pron + " ] ";
+            const ushort * utf16 = wordInfo.pron.utf16();
+            QString utf16pron;
+            for (int j = 0; j < wordInfo.pron.size(); ++j){
+                ushort ch = *(utf16+j);
+                QString temp = "&#";
+                temp += QString::number(ch);
+                temp += ";";
+                utf16pron += temp;
+                qDebug()<<temp;
+            }
+
+            qDebug() << utf16pron;
+
+            QFileInfo fileInfo(outFile);
+            QString mp3path = fileInfo.baseName()+"_files/Elements";
+            Util::downloadFile(wordInfo.audio, mp3path);
+
+            QString pron = " [ " +utf16pron + " ] ";
+            QTextCodec *gbk = QTextCodec::codecForName("GB18030");
+            QTextCodec *utf8 = QTextCodec::codecForName("UTF-8");
+
+            QString g2u = gbk->toUnicode(gbk->fromUnicode(wordInfo.pron));
+            qDebug()<< wordInfo.pron<<"    GBK -> UTF-8     " << g2u<<endl;
+
+            QString cn = wordInfo.cn;
+            QStringList cnList = cn.split("\n");
+
+            //        QString question = question_head + wordInfo.word;
+            //        outStream << question +"\r"<<endl;
+
+            QString answer_pron = answer_head +pron+ br;
+            answer.append(answer_pron + "\r\n");
+            //        outStream << answer_pron <<"\r"<< endl;
+
+            foreach (QString onecn, cnList) {
+                QString oneAnswer = answer_head + onecn + br;
+                answer.append(oneAnswer + "\r\n");
+                //            outStream << oneAnswer <<"\r"<< endl;
+            }
+            answer = collinsInfo.cn+br+collinsInfo.st+br+pron+br+collinsInfo.grammer+br+collinsInfo.explain+br+collinsInfo.usagenote;
+
+
+            iid = iid + 2;
+            QDomElement ele = document.createElement("SuperMemoElement");
+            QDomText _id = document.createTextNode(QString::number(iid + 2));
+            QDomElement eleID = document.createElement("ID");
+            eleID.appendChild(_id);
+
+            QDomElement eleType = document.createElement("Type");
+            QDomText _type = document.createTextNode("Item");
+            eleType.appendChild(_type);
+
+            QDomElement eleOrd = document.createElement("Ordinal");
+            QDomText _ord = document.createTextNode("100");
+            eleOrd.appendChild(_ord);
+
+            QDomElement content = document.createElement("Content");
+            {
+                //            QString pron;
+                QString name = wordInfo.word;
+                QString audio = wordInfo.audio;
+                int audioIndex = audio.lastIndexOf("/");
+                audio = audio.mid(audioIndex + 1);
+                QString url = "[SecondaryStorage]\\"+ audio;
+                qDebug() << "mp3name"<<url;
+                QDomElement questionEle = document.createElement("Question");
+                questionEle.appendChild(document.createTextNode(question));
+                QDomElement answerEle = document.createElement("Answer");
+                answerEle.appendChild(document.createTextNode(answer));
+
+                QDomElement soundEle = document.createElement("Sound");
+                QDomElement textEle = document.createElement("Text");
+                textEle.appendChild(document.createTextNode(pron));
+                QDomElement urlEle = document.createElement("URL");
+                urlEle.appendChild(document.createTextNode(url));
+                QDomElement nameEle = document.createElement("Name");
+                nameEle.appendChild(document.createTextNode(name));
+                soundEle.appendChild(textEle);
+                soundEle.appendChild(urlEle);
+                soundEle.appendChild(nameEle);
+
+                content.appendChild(questionEle);
+                content.appendChild(answerEle);
+                content.appendChild(soundEle);
+            }
+            ele.appendChild(eleID);
+            ele.appendChild(eleType);
+            ele.appendChild(eleOrd);
+            ele.appendChild(content);
+
+            eleA.appendChild(ele);
         }
-
-        qDebug() << utf16pron;
-
-        QFileInfo fileInfo(outFile);
-        QString mp3path = fileInfo.baseName()+"_files/Elements";
-        Util::downloadFile(wordInfo.audio, mp3path);
-
-        QString pron = " [ " +utf16pron + " ] ";
-        QTextCodec *gbk = QTextCodec::codecForName("GB18030");
-        QTextCodec *utf8 = QTextCodec::codecForName("UTF-8");
-
-        QString g2u = gbk->toUnicode(gbk->fromUnicode(wordInfo.pron));
-        qDebug()<< wordInfo.pron<<"    GBK -> UTF-8     " << g2u<<endl;
-
-        QString cn = wordInfo.cn;
-        QStringList cnList = cn.split("\n");
-
-//        QString question = question_head + wordInfo.word;
-//        outStream << question +"\r"<<endl;
-
-        QString answer_pron = answer_head +pron+ br;
-        answer.append(answer_pron + "\r\n");
-//        outStream << answer_pron <<"\r"<< endl;
-
-        foreach (QString onecn, cnList) {
-            QString oneAnswer = answer_head + onecn + br;
-            answer.append(oneAnswer + "\r\n");
-//            outStream << oneAnswer <<"\r"<< endl;
-        }
-
-
-        QDomElement ele = document.createElement("SuperMemoElement");
-        QDomText _id = document.createTextNode(QString::number(i + 2));
-        QDomElement eleID = document.createElement("ID");
-        eleID.appendChild(_id);
-
-        QDomElement eleType = document.createElement("Type");
-        QDomText _type = document.createTextNode("Item");
-        eleType.appendChild(_type);
-
-        QDomElement eleOrd = document.createElement("Ordinal");
-        QDomText _ord = document.createTextNode("100");
-        eleOrd.appendChild(_ord);
-
-        QDomElement content = document.createElement("Content");
-        {
-//            QString pron;
-            QString name = wordInfo.word;
-            QString audio = wordInfo.audio;
-            int audioIndex = audio.lastIndexOf("/");
-            audio = audio.mid(audioIndex + 1);
-            QString url = "[SecondaryStorage]\\"+ audio;
-            qDebug() << "mp3name"<<url;
-            QDomElement questionEle = document.createElement("Question");
-            questionEle.appendChild(document.createTextNode(question));
-            QDomElement answerEle = document.createElement("Answer");
-            answerEle.appendChild(document.createTextNode(answer));
-
-            QDomElement soundEle = document.createElement("Sound");
-            QDomElement textEle = document.createElement("Text");
-            textEle.appendChild(document.createTextNode(pron));
-            QDomElement urlEle = document.createElement("URL");
-            urlEle.appendChild(document.createTextNode(url));
-            QDomElement nameEle = document.createElement("Name");
-            nameEle.appendChild(document.createTextNode(name));
-            soundEle.appendChild(textEle);
-            soundEle.appendChild(urlEle);
-            soundEle.appendChild(nameEle);
-
-            content.appendChild(questionEle);
-            content.appendChild(answerEle);
-            content.appendChild(soundEle);
-        }
-        ele.appendChild(eleID);
-        ele.appendChild(eleType);
-        ele.appendChild(eleOrd);
-        ele.appendChild(content);
-
-        eleA.appendChild(ele);
+        root.appendChild(eleA);
+        document.appendChild(root);
     }
-    root.appendChild(eleA);
-    document.appendChild(root);
-
 
 
 

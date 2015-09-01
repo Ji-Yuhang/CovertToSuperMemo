@@ -5,6 +5,7 @@
 #include <QTextCodec>
 #include "util.hxx"
 #include "shanbay.hxx"
+#include "collins.h"
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -18,6 +19,7 @@ int main(int argc, char *argv[])
 //    a.setWindowIcon(QIcon(pic));
 
     Shanbay shanbay;    // singleton
+    Collins collins;
     MainWindow w;
     w.show();
 

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network xml
+QT       += core gui network xml sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,12 +16,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     shanbay.cpp \
     util.cpp \
-    json.cpp
+    json.cpp \
+    collins.cpp
 
 HEADERS  += mainwindow.h \
     shanbay.hxx \
     util.hxx \
-    json.h
+    json.h \
+    collins.h
 
 FORMS    += mainwindow.ui
 
