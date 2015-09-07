@@ -26,7 +26,7 @@ QList<CollinsInfo> Collins::zhCollins(QString word)
     QList<CollinsInfo> empty;
     QSqlQuery query(zhCollinsdb_);
 //    QString sql = QString("select * from zhmultiwords where word='%1'").arg(word);
-    query.prepare("select * from zhmultiwords where word=:word");
+    query.prepare("select * from zhmultiwords where word=:word and type=1");
     query.bindValue(":word",word);
     if (query.exec()) {
         while (query.next()) {
