@@ -17,15 +17,18 @@ SOURCES += main.cpp\
     shanbay.cpp \
     util.cpp \
     json.cpp \
-    collins.cpp
+    collins.cpp \
+    randomwords.cpp
 
 HEADERS  += mainwindow.h \
     shanbay.hxx \
     util.hxx \
     json.h \
-    collins.h
+    collins.h \
+    randomwords.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    randomwords.ui
 
 win32 {
 #    LIBS += -lshell32
