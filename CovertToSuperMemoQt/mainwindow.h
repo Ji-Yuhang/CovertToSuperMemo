@@ -4,29 +4,11 @@
 #include <QMainWindow>
 #include <QLabel>
 #include <QTimer>
+#include "filewords.h"
+#include "randomwords.h"
 namespace Ui {
 class MainWindow;
 }
-class DropLabel : public QLabel
-{
-Q_OBJECT
-public:
-    explicit DropLabel(QWidget *parent = 0);
-    ~DropLabel();
-    void setAnimation(bool open);
-    QString filePath() {return filePath_;}
-protected:
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dropEvent(QDropEvent *event);
-    void paintEvent(QPaintEvent* event);
-private:
-    bool isAnimation_;
-    qreal dashOffset_;
-    QTimer timer_;
-    QString filePath_;
-private Q_SLOTS:
-    void onTimeout();
-};
 
 class MainWindow : public QMainWindow
 {
@@ -38,15 +20,12 @@ public:
 protected:
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
-private slots:
-    void on_pushButton_clicked();
 
-    void on_pushButton_2_clicked();
 
 private:
     Ui::MainWindow *ui;
-    DropLabel* dropLabel_;
-    QString toFile_;
+    FileWords fileWords_;
+    RandomWords randomWords_;
 };
 
 #endif // MAINWINDOW_H
