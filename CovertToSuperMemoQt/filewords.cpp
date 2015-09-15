@@ -8,6 +8,7 @@
 #include <QPainter>
 #include <QDateTime>
 #include <QProcess>
+#include <QMimeData>
 DropLabel::DropLabel(QWidget *parent)
     :QLabel(parent)
     ,isAnimation_(false)
@@ -51,6 +52,7 @@ void DropLabel::dropEvent(QDropEvent *event)
     isAnimation_ = false;
     timer_.stop();
     QList<QUrl> urls = event->mimeData()->urls();
+    qDebug() << urls;
     if (urls.isEmpty()) return;
     QString path = urls.first().toLocalFile();
     qDebug() << " event->mimeData()->text() " << path;

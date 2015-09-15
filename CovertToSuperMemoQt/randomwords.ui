@@ -205,7 +205,7 @@
    <item row="1" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="randomButton">
        <property name="text">
         <string>生成随机单词</string>
        </property>

@@ -14,6 +14,8 @@ class RandomWords : public QWidget
 public:
     explicit RandomWords(QWidget *parent = 0);
     ~RandomWords();
+public Q_SLOTS:
+    void onRandomButtonClicked();
 
 private:
     Ui::RandomWords *ui;

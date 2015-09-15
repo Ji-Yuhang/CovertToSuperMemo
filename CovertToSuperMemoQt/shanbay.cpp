@@ -39,7 +39,12 @@ WordInfo Shanbay::getWordInfo(const QString &word)
     QSslConfiguration config;
 
     config.setPeerVerifyMode(QSslSocket::VerifyNone);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    config.setProtocol(QSsl::TlsV1_0);
+#else
     config.setProtocol(QSsl::TlsV1);
+#endif
+
     request.setSslConfiguration(config);
 
     QNetworkReply* reply = netManager_.get(request);
