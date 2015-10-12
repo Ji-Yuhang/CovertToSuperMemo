@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     json.cpp \
     collins.cpp \
     randomwords.cpp \
-    filewords.cpp
+    filewords.cpp \
+    remotesupermemoinfo.cpp
 
 HEADERS  += mainwindow.h \
     shanbay.hxx \
@@ -27,7 +28,8 @@ HEADERS  += mainwindow.h \
     json.h \
     collins.h \
     randomwords.h \
-    filewords.h
+    filewords.h \
+    remotesupermemoinfo.h
 
 FORMS    += mainwindow.ui \
     randomwords.ui \

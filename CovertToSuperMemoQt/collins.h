@@ -27,7 +27,11 @@ class Collins : public QObject
     Q_OBJECT
 public:
     explicit Collins(QObject *parent = 0);
+    void initCollins();
     QList<CollinsInfo> zhCollins(QString word);
+    QList<CollinsInfo> allCollins();
+    QList<CollinsInfo> starCollins(int star);
+
     static Collins* instance(){return g_collins_;}
 
 signals:
@@ -36,6 +40,7 @@ public slots:
 private:
     QSqlDatabase zhCollinsdb_;
     static Collins* g_collins_;
+    QList<CollinsInfo> allCollinsInfo_;
 };
 #define COLLINS Collins::instance()
 #endif // COLLINS_H
