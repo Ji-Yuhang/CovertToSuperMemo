@@ -18,7 +18,7 @@ RandomWords::~RandomWords()
 
 void RandomWords::initCollinsLabel()
 {
-    onCollinsStarChanged(5);
+    onCollinsStarChanged(0);
 
 }
 
