@@ -4,7 +4,7 @@
 #include "remotesupermemoinfo.h"
 
 #include <QWidget>
-
+#include "collins.h"
 namespace Ui {
 class RandomWords;
 }
@@ -23,9 +23,18 @@ public Q_SLOTS:
 private slots:
     void onCollinsStarChanged(int);
 
+    void on_covertButton_clicked();
+
+    void on_openFileDirButton_clicked();
+
+    void on_setFlagKnowButton_clicked();
+
 private:
+    CollinsInfo findRandomWord(const QList<CollinsInfo>& unKnowWordList);
     Ui::RandomWords *ui;
     RemoteSupermemoInfo remoteSupermemoInfo_;
+    QList<CollinsInfo> randomWordInfoList_;
+    QString toFile_;
 
 };
 

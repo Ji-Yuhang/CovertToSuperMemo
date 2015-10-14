@@ -99,6 +99,15 @@ bool Util::covertToSuperMemo(const QString &fromFile, const QString &toFile, QPr
 
 bool Util::covertToSuperMemoXML(const QString &fromFile, const QString &toFile, QProgressBar *bar, QLabel *label)
 {
+
+    QStringList wordList = getSourceWordList(fromFile);
+    return covertToSuperMemoXML(wordList,toFile,bar,label);
+
+}
+
+bool Util::covertToSuperMemoXML(const QStringList &wordList, const QString &toFile, QProgressBar *bar, QLabel *label)
+{
+
     QFile outFile;
     outFile.setFileName(toFile);
     if (!outFile.open(QIODevice::WriteOnly)) {
@@ -106,7 +115,6 @@ bool Util::covertToSuperMemoXML(const QString &fromFile, const QString &toFile, 
         return false;
     }
 
-    QStringList wordList = getSourceWordList(fromFile);
     if (bar) bar->setRange(0, wordList.size());
 
     QDomDocument document;
@@ -151,7 +159,17 @@ bool Util::covertToSuperMemoXML(const QString &fromFile, const QString &toFile, 
          */
         QList<CollinsInfo> collinsInfoList = COLLINS->zhCollins(word);
         Q_FOREACH(CollinsInfo collinsInfo, collinsInfoList) {
-            QString question = collinsInfo.sentences.replace(word,"<FONT color=#ff0000\"><STRONG>"+word+"</STRONG></FONT>");
+            QString tempSentence = collinsInfo.sentences;
+            if (tempSentence.contains(word))
+                tempSentence = tempSentence.replace(word,"<FONT color=#ff0000\"><STRONG>"+word+"</STRONG></FONT>");
+            if (word.size() > 0) {
+                QString bigWord = word.at(0).toUpper() + word.mid(1);
+                if (tempSentence.contains(bigWord))
+                    tempSentence = tempSentence.replace(bigWord,"<FONT color=#ff0000\"><STRONG>"+bigWord+"</STRONG></FONT>");
+            }
+
+//            QString question = collinsInfo.sentences.replace(word,"<FONT color=#ff0000\"><STRONG>"+word+"</STRONG></FONT>");
+            QString question = tempSentence;
             QString answer;
 
             QString question_head = "Q: ";

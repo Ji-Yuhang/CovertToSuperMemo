@@ -15,6 +15,7 @@ public:
     ~Util();
     static bool covertToSuperMemo(const QString& fromFile, const QString& toFile,QProgressBar* bar = 0, QLabel* label = 0);
     static bool covertToSuperMemoXML(const QString& fromFile, const QString& toFile,QProgressBar* bar = 0, QLabel* label = 0);
+    static bool covertToSuperMemoXML(const QStringList& wordList, const QString& toFile,QProgressBar* bar = 0, QLabel* label = 0);
 
     static QStringList getSourceWordList(const QString& sourceFile);
     static void downloadFile(const QString& uri, const QString& path);

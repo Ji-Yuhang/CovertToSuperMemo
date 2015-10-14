@@ -232,7 +232,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="covertButton">
        <property name="text">
         <string>转换</string>
        </property>
@@ -241,14 +241,14 @@
      <item>
       <widget class="QProgressBar" name="progressBar">
        <property name="value">
-        <number>24</number>
+        <number>0</number>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>word</string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -274,9 +274,16 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
-       <widget class="QPushButton" name="pushButton_3">
+       <widget class="QPushButton" name="openFileDirButton">
         <property name="text">
          <string>转换成功打开xml文件夹</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QPushButton" name="setFlagKnowButton">
+        <property name="text">
+         <string>同步结果到服务器</string>
         </property>
        </widget>
       </item>

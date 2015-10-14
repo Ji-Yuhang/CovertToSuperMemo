@@ -6,10 +6,11 @@
 #include <QList>
 #include <QSqlDatabase>
 #include <QDateTime>
-
+#include "collins.h"
 enum SuperMemoFlag {
     NEW_INFO = 0,
-    SET_KNOWN
+    SET_KNOWN,
+    IGNORE
 };
 
 struct SuperMemoInfo {
@@ -28,9 +29,14 @@ public:
     explicit RemoteSupermemoInfo(QObject *parent = 0);
     ~RemoteSupermemoInfo();
     void initInfoList();
+    bool setFlagKnown(const QStringList list);
+//    SuperMemoInfo findSuperMemoInfo(int collinsWordID);
+    QList<SuperMemoInfo> findSuperMemoInfoList(const QString& word);
 
     QList<SuperMemoInfo> infoList;
     QSqlDatabase aliyun_;
+    QList<int> errorSupermemoIDlist;
+
 signals:
 
 public slots:
