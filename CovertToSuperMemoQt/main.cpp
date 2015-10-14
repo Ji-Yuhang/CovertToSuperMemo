@@ -18,9 +18,11 @@ int main(int argc, char *argv[])
 //    pic.load("./sang.png");
 //    a.setWindowIcon(QIcon(pic));
 
+    try {
     Shanbay shanbay;    // singleton
     Collins collins;
     MainWindow w;
+    qDebug() << "will show MainWindow";
     w.show();
 
     QString fromFile;// = "/home/jiyuhang/myjianguoyun/nce/one.txt";
@@ -36,4 +38,8 @@ int main(int argc, char *argv[])
 //    if (!fromFile.isEmpty()) Util::covertToSuperMemo(fromFile, toFile);
 
     return a.exec();
+    } catch (std::exception &e) {
+        qDebug() <<e.what();
+
+    }
 }

@@ -106,7 +106,10 @@ void RandomWords::onCollinsStarChanged(int index)
     QString text = QString("%1/%2").arg(know).arg(total);
 
     ui->label_6->setText(text);
-    ui->label_5->setText(QString("%1%").arg(know*100.0/total));
+    double ratio = 0.0;
+    if (total != 0)     know*100.0/total;
+
+    ui->label_5->setText(QString("%1%").arg(ratio));
 }
 
 CollinsInfo RandomWords::findRandomWord(const QList<CollinsInfo> &unKnowWordList)

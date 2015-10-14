@@ -24,8 +24,10 @@ void RemoteSupermemoInfo::initInfoList()
     aliyun_.setUserName("jiyuhang");
     aliyun_.setPassword("jiyuhang8757871");
     if (!aliyun_.open()) {
-        QMessageBox::warning(0,"cannot open aliyun Mysql",QString::fromUtf8("\xE6\x89\xBE\xE4\xB8\x8D\xE5\x88\xB0\xE6\x95\xB0\xE6\x8D\xAE\xE5\xBA\x93\xE6\x96\x87\xE4\xBB\xB6\x20\x63\x6F\x6C\x6C\x69\x6E\x73\x2E\x64\x62"));
+        QMessageBox::warning(0,"cannot open aliyun Mysql",QString::fromUtf8("\xE6\x97\xA0\xE6\xB3\x95\xE8\xBF\x9E\xE6\x8E\xA5\xE5\x88\xB0\xE8\xBF\x9C\xE7\xA8\x8B\xE6\x95\xB0\xE6\x8D\xAE\xE5\xBA\x93"));
         return;
+    } else {
+        qDebug() << "oepn remote mysql SUCCESS";
     }
     QSqlQuery query(aliyun_);
 
@@ -44,7 +46,7 @@ void RemoteSupermemoInfo::initInfoList()
         }
 
     }else {
-        qDebug() << "sql exec ERROR"<< query.lastError().text();
+        qDebug() << "sql exec ERROR"<< query.lastError().text()<<query.lastQuery();
     }
 }
 
@@ -76,7 +78,7 @@ bool RemoteSupermemoInfo::setFlagKnown(const QStringList list)
 
         }else {
             errorSupermemoIDlist.append(supermemoID);
-            qDebug() << "sql exec ERROR"<< query.lastError().text();
+            qDebug() << "sql exec ERROR"<< query.lastError().text()<<query.lastQuery();
         }
     }
     aliyun_.commit();

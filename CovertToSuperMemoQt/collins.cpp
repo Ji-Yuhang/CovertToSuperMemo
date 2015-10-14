@@ -77,7 +77,7 @@ void Collins::initCollins()
 
 
     }else {
-        qDebug() << "sql exec ERROR"<< query.lastError().text();
+        qDebug() << "sql exec ERROR"<< query.lastError().text()<<query.lastQuery();
     }
 }
 
@@ -135,7 +135,7 @@ QList<CollinsInfo> Collins::zhCollins(QString word)
             }
 
         }else {
-            qDebug() << "sql exec ERROR"<< query.lastError().text();
+            qDebug() << "sql exec ERROR"<< query.lastError().text()<<query.lastQuery();
         }
         return empty;
 }
