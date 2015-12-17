@@ -7,6 +7,8 @@
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QUrl>
+#include <QContextMenuEvent>
+#include <QMenu>
 RandomWords::RandomWords(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::RandomWords)
@@ -114,8 +116,14 @@ void RandomWords::onCollinsStarChanged(int index)
 
 CollinsInfo RandomWords::findRandomWord(const QList<CollinsInfo> &unKnowWordList)
 {
-    int index = qrand() % unKnowWordList.size();
-    return unKnowWordList.at(index);
+    int index = qrand();
+    if(unKnowWordList.size() > 0) {
+        index = index % unKnowWordList.size();
+        return unKnowWordList.at(index);
+    } else {
+        return CollinsInfo();
+    }
+
 }
 
 
@@ -168,4 +176,46 @@ void RandomWords::on_setFlagKnowButton_clicked()
         QMessageBox::information(0, "SUCCESS","set flag SUCCESS!");
     }
 
+}
+
+void RandomWords::onRemoveWord()
+{
+    QAction* action = qobject_cast<QAction*>(sender());
+    if (!action) return;
+    QString word = action->property("word").toString();
+    int row = action->property("row").toInt();
+    ui->listWidget->takeItem(row);
+
+    QList<CollinsInfo>::iterator it = randomWordInfoList_.begin();
+    for (; it != randomWordInfoList_.end(); ++it) {
+        if (it->word == word) {
+             randomWordInfoList_.erase(it);
+             break;
+        }
+    }
+
+
+}
+
+void RandomWords::contextMenuEvent(QContextMenuEvent *event)
+{
+    QPoint pos = event->pos();
+    QPoint listWidgetPos = ui->listWidget->mapFromParent(pos);
+    QPoint globalPos = event->globalPos();
+
+    QListWidgetItem* item = ui->listWidget->itemAt(listWidgetPos);
+    QString word;
+    if (item) {
+        word = item->text();
+    } else {
+        return;
+    }
+    QMenu menu;
+    menu.move(globalPos);
+    QAction* action = menu.addAction(QStringLiteral("删除 ") + word);
+    action->setProperty("word", word);
+    action->setProperty("row", ui->listWidget->row(item));
+
+    connect(action, &QAction::triggered, this, &RandomWords::onRemoveWord);
+    menu.exec();
 }

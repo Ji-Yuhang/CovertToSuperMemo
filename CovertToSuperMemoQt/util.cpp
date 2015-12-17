@@ -159,6 +159,7 @@ bool Util::covertToSuperMemoXML(const QStringList &wordList, const QString &toFi
          */
         QList<CollinsInfo> collinsInfoList = COLLINS->zhCollins(word);
         Q_FOREACH(CollinsInfo collinsInfo, collinsInfoList) {
+            QMap<QString,QString> tempExample = collinsInfo.example;
             QString tempSentence = collinsInfo.sentences;
             if (tempSentence.contains(word))
                 tempSentence = tempSentence.replace(word,"<FONT color=#ff0000\"><STRONG>"+word+"</STRONG></FONT>");

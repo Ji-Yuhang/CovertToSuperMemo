@@ -29,6 +29,9 @@ private slots:
 
     void on_setFlagKnowButton_clicked();
 
+    void onRemoveWord();
+private:
+    void contextMenuEvent(QContextMenuEvent * event);
 private:
     CollinsInfo findRandomWord(const QList<CollinsInfo>& unKnowWordList);
     Ui::RandomWords *ui;
