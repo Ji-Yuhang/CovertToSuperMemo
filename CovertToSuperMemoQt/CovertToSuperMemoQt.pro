@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = CovertToSuperMemoQt
 TEMPLATE = app
 CONFIG += console
-
+DESTDIR = ../bin
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -21,7 +21,10 @@ SOURCES += main.cpp\
     collins.cpp \
     randomwords.cpp \
     filewords.cpp \
-    remotesupermemoinfo.cpp
+    remotesupermemoinfo.cpp \
+    memounit.cpp \
+    memocollection.cpp \
+    collinswordtomemo.cpp
 
 HEADERS  += mainwindow.h \
     shanbay.hxx \
@@ -30,7 +33,10 @@ HEADERS  += mainwindow.h \
     collins.h \
     randomwords.h \
     filewords.h \
-    remotesupermemoinfo.h
+    remotesupermemoinfo.h \
+    memounit.h \
+    memocollection.h \
+    collinswordtomemo.h
 
 FORMS    += mainwindow.ui \
     randomwords.ui \

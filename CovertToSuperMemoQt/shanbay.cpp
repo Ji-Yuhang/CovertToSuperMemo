@@ -18,9 +18,9 @@ Shanbay::~Shanbay()
 
 }
 
-WordInfo Shanbay::getWordInfo(const QString &word)
+ShanbayWordInfo Shanbay::getWordInfo(const QString &word)
 {
-    WordInfo wordInfo;
+    ShanbayWordInfo wordInfo;
     wordInfo.word = word;
     wordInfo.pron = "nit";
     wordInfo.cn;

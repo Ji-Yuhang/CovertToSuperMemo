@@ -148,7 +148,7 @@ QList<CollinsInfo> Collins::allCollins()
 QList<CollinsInfo> Collins::starCollins(int star)
 {
     QList<CollinsInfo> empty;
-    Q_FOREACH(CollinsInfo info, allCollinsInfo_) {
+    Q_FOREACH(const CollinsInfo& info, allCollinsInfo_) {
         if (info.frequency == star) {
             empty.append(info);
         }

@@ -14,6 +14,7 @@
 #include <QDir>
 #include "collins.h"
 #include <QDebug>
+#include "collinswordtomemo.h"
 Util::Util(QObject *parent) : QObject(parent)
 {
 
@@ -42,7 +43,7 @@ bool Util::covertToSuperMemo(const QString &fromFile, const QString &toFile, QPr
     foreach (QString word, wordList) {
         index++;
         qDebug() <<index<< ": get word -> " << word;
-        WordInfo wordInfo = Shanbay::instance()->getWordInfo(word);
+        ShanbayWordInfo wordInfo = Shanbay::instance()->getWordInfo(word);
 
         if (bar) bar->setValue(index);
         if (label) label->setText(word);
@@ -105,8 +106,29 @@ bool Util::covertToSuperMemoXML(const QString &fromFile, const QString &toFile, 
 
 }
 
+QString highlightWord(const QString& sentence, const QString& word/*, Qt::CaseSensitivity cs = Qt::CaseInsensitive*/)
+{
+//    if (cs == Qt::CaseInsensitive) {
+//    }
+    QString tempSentence = sentence;
+    if (tempSentence.contains(word))
+        tempSentence = tempSentence.replace(word,"<FONT color=#ff0000\"><STRONG>"+word+"</STRONG></FONT>");
+    if (word.size() > 0) {
+        QString bigWord = word.at(0).toUpper() + word.mid(1);
+        if (tempSentence.contains(bigWord))
+            tempSentence = tempSentence.replace(bigWord,"<FONT color=#ff0000\"><STRONG>"+bigWord+"</STRONG></FONT>");
+    }
+    return tempSentence;
+}
+
 bool Util::covertToSuperMemoXML(const QStringList &wordList, const QString &toFile, QProgressBar *bar, QLabel *label)
 {
+    EnExampleToEnJieshi straregy;
+    CollinsWordToMemo collinsToMemo(&straregy);
+    collinsToMemo.addWordList(wordList);
+    QSharedPointer<MemoCollection> collection = collinsToMemo.makeCollection();
+
+    return collection->toXmlFile(toFile);
 
     QFile outFile;
     outFile.setFileName(toFile);
@@ -145,7 +167,7 @@ bool Util::covertToSuperMemoXML(const QStringList &wordList, const QString &toFi
     for (int i = 0; i < count - 1; ++i) {
         QString word = wordList[i];
         qDebug() <<i<< ": get word -> " << word;
-        WordInfo wordInfo = Shanbay::instance()->getWordInfo(word);
+        ShanbayWordInfo wordInfo = Shanbay::instance()->getWordInfo(word);
         if (wordInfo.word.isEmpty()) continue;
 
         if (bar) bar->setValue(i);
@@ -159,18 +181,26 @@ bool Util::covertToSuperMemoXML(const QStringList &wordList, const QString &toFi
          */
         QList<CollinsInfo> collinsInfoList = COLLINS->zhCollins(word);
         Q_FOREACH(CollinsInfo collinsInfo, collinsInfoList) {
-            QMap<QString,QString> tempExample = collinsInfo.example;
-            QString tempSentence = collinsInfo.sentences;
-            if (tempSentence.contains(word))
-                tempSentence = tempSentence.replace(word,"<FONT color=#ff0000\"><STRONG>"+word+"</STRONG></FONT>");
-            if (word.size() > 0) {
-                QString bigWord = word.at(0).toUpper() + word.mid(1);
-                if (tempSentence.contains(bigWord))
-                    tempSentence = tempSentence.replace(bigWord,"<FONT color=#ff0000\"><STRONG>"+bigWord+"</STRONG></FONT>");
-            }
+            QMap<QString,QString> tempExample = collinsInfo.example; //<en,zh> pair
+            QStringList tempEnList = tempExample.keys();
+            QString tempEn = tempEnList.join("<br/>");
+            QString highlightEn = highlightWord(tempEn, word);
+//            QString tempSentence = collinsInfo.sentences;
+//            if (tempSentence.contains(word))
+//                tempSentence = tempSentence.replace(word,"<FONT color=#ff0000\"><STRONG>"+word+"</STRONG></FONT>");
+//            if (word.size() > 0) {
+//                QString bigWord = word.at(0).toUpper() + word.mid(1);
+//                if (tempSentence.contains(bigWord))
+//                    tempSentence = tempSentence.replace(bigWord,"<FONT color=#ff0000\"><STRONG>"+bigWord+"</STRONG></FONT>");
+//            }
+            QString tempSentence = highlightWord(collinsInfo.sentences, word);
 
 //            QString question = collinsInfo.sentences.replace(word,"<FONT color=#ff0000\"><STRONG>"+word+"</STRONG></FONT>");
+#if 0
             QString question = tempSentence;
+#else
+            QString question = highlightEn;
+#endif
             QString answer;
 
             QString question_head = "Q: ";
@@ -186,7 +216,7 @@ bool Util::covertToSuperMemoXML(const QStringList &wordList, const QString &toFi
                 temp += QString::number(ch);
                 temp += ";";
                 utf16pron += temp;
-                qDebug()<<temp;
+//                qDebug()<<temp;
             }
 
             qDebug() << utf16pron;
@@ -217,8 +247,7 @@ bool Util::covertToSuperMemoXML(const QStringList &wordList, const QString &toFi
                 answer.append(oneAnswer + "\r\n");
                 //            outStream << oneAnswer <<"\r"<< endl;
             }
-            answer = collinsInfo.cn+br+collinsInfo.st+br+pron+br+collinsInfo.grammer+br+collinsInfo.explain+br+collinsInfo.usagenote;
-
+            answer = tempSentence+br+collinsInfo.cn+br+collinsInfo.st+br+pron+br+collinsInfo.grammer+br+collinsInfo.explain+br+collinsInfo.usagenote;
 
             iid = iid + 2;
             QDomElement ele = document.createElement("SuperMemoElement");

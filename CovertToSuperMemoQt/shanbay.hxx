@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QNetworkAccessManager>
-struct WordInfo {
+struct ShanbayWordInfo {
     QString word;
     QString pron;
     QString audio;
@@ -18,7 +18,7 @@ class Shanbay : public QObject
 public:
     explicit Shanbay(QObject *parent = 0);
     ~Shanbay();
-    WordInfo getWordInfo(const QString& word);
+    ShanbayWordInfo getWordInfo(const QString& word);
     static Shanbay* instance() {return g_shanbay_;}
 private:
     static Shanbay* g_shanbay_;

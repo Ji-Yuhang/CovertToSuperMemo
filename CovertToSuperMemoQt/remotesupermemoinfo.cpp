@@ -45,7 +45,7 @@ void RemoteSupermemoInfo::initInfoList()
             infoList.append(info);
         }
 
-    }else {
+    } else {
         qDebug() << "sql exec ERROR"<< query.lastError().text()<<query.lastQuery();
     }
 }
