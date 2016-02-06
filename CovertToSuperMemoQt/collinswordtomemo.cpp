@@ -92,7 +92,8 @@ MemoUnit EnExampleToEnJieshi::covertToMemoUnit(const CollinsInfo &collinsInfo)
             +collinsInfo.usagenote;     // Usage Note :In British English, a person's weight is normally measured in stones and pounds.
                                         //A stone is equivalent to 14 pounds, or 6.35 kilograms...
 #else
-    answer = highlightSentence;
+    answer = highlightSentence + br
+            + pron;
 #endif
     unit.setQuestion(Question(question));
     unit.setAnswer(Answer(answer));
