@@ -10,19 +10,15 @@ end
 class Zhmultiword < ActiveRecord::Base
     self.inheritance_column = :_type_disabled
 end
-$map = Hash.new # word => [zhs]
+$map = {} # word => [zhs]
 def find_collins_word(word)
-    ap Zhmultiword.find 182
     zhs = Zhmultiword.where :word=>word
     #ap word
     #ap zhs.class
-    ap word if word.nil?
-    ap word.class
     zhs.each do |zh|
-        ap zh
+        #ap zh
     end
-    ap zhs.size if zhs.nil?
-    $maps[word] = zhs
+    $map[word] = zhs
 end
 
 wordlist = []
@@ -35,6 +31,26 @@ words.each_line do |word|
 end
 ap wordlist
 ap $map
+lines = []
+$map.each do |key, zhs|
+    zhs.each do |zh|
+        content = zh.sentence
+        next if content.nil?
+        content += "    "if !zh.cn.nil?
+        content += zh.cn if !zh.cn.nil?
+        content += "  "
+        content += zh.word
+        
+        lines.push content
+        #io.puts content
+    end
+end
+lines.shuffle!
+io = File.open('./star3-wordlist/1-sentence-cn.txt', 'w')
+lines.each do |line|
+    io.puts line
+end
+io.close
 
 =begin
 zhs = Zhwords.where :frequency=>3
