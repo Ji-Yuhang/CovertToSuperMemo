@@ -168,7 +168,7 @@ MemoUnit EnExampleToEnJieshi::covertToMemoUnit(const CollinsInfo &collinsInfo)
     QString url = "[SecondaryStorage]\\"+ audio;
 
     sound.setUrl(url);
-    sound.setName(word);
+    sound.setName("");
     sound.setText(pron);
     QUrl sourceUrl = wordInfo.audio;
     QFileInfo fileinfo("./shanbaymp3/" + audio );
