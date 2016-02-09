@@ -17,7 +17,7 @@ copy = words.shuffle
 ap copy.size
 index =1
 while copy.size>0
-    list = copy.slice!(1,30)
+    list = copy.slice!(1,15)
     ap list
     ap list.size
     copy.shuffle!
@@ -28,6 +28,7 @@ while copy.size>0
         io.puts word
     end
     io.close
+    break if list.empty?
     
 end
 

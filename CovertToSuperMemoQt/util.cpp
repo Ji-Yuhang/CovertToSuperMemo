@@ -128,6 +128,7 @@ bool Util::covertToSuperMemoXML(const QStringList &wordList, const QString &toFi
     collinsToMemo.addWordList(wordList);
     QSharedPointer<MemoCollection> collection = collinsToMemo.makeCollection();
 
+    collection->shuffle();
     return collection->toXmlFile(toFile);
 
     QFile outFile;

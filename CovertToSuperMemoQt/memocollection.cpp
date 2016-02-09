@@ -8,6 +8,7 @@
 #include <QDir>
 #include "shanbay.hxx"
 #include "util.hxx"
+#include <algorithm>
 MemoCollection::MemoCollection()
 {
 
@@ -23,6 +24,11 @@ void MemoCollection::addMemoUnitList(const QList<MemoUnit> &list)
     Q_FOREACH( const MemoUnit& unit, list) {
         addMemoUnit(unit);
     }
+}
+
+void MemoCollection::shuffle()
+{
+    std::random_shuffle(data_.begin(), data_.end());
 }
 
 bool MemoCollection::toXmlFile(const QString &toFile)

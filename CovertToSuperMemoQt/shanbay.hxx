@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QNetworkAccessManager>
+#include <QSqlDatabase>
 struct ShanbayWordInfo {
     QString word;
     QString pron;
@@ -21,8 +22,12 @@ public:
     ShanbayWordInfo getWordInfo(const QString& word);
     static Shanbay* instance() {return g_shanbay_;}
 private:
+    ShanbayWordInfo getWordInfoFromSQLite3(const QString& word);
+    QSqlDatabase shanbayDB_;
+
     static Shanbay* g_shanbay_;
     QNetworkAccessManager netManager_;
+    QMap<QString ,ShanbayWordInfo> data_;
 
 signals:
 

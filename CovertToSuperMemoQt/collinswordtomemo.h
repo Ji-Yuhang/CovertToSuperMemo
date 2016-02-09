@@ -19,7 +19,9 @@ public:
 private:
 
     QString highlightWord(const QString& sentence, const QString& word/*, Qt::CaseSensitivity cs = Qt::CaseInsensitive*/);
+    QString clozeWord(const QString& sentence, const QString& word);
     QString pronToHtml(const QString& pron);
+    QString multiSpace(int count);
 };
 
 class CollinsWordToMemo {

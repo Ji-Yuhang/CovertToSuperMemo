@@ -5,12 +5,20 @@
 #include <QSslConfiguration>
 #include <assert.h>
 #include "json.h"
+#include <QDomDocument>
+#include <QMessageBox>
+#include <QSqlQuery>
+#include <QSqlError>
 Shanbay* Shanbay::g_shanbay_ = 0;
 Shanbay::Shanbay(QObject *parent) : QObject(parent)
 {
     assert(!g_shanbay_);
     g_shanbay_ = this;
-
+    shanbayDB_ = QSqlDatabase::addDatabase("QSQLITE","shanbaydb");
+    shanbayDB_.setDatabaseName("./shanbay.db");
+    if (!shanbayDB_.open()) {
+        QMessageBox::warning(0,"cannot find shanbay.db",QString::fromUtf8("\xE6\x89\xBE\xE4\xB8\x8D\xE5\x88\xB0\xE6\x95\xB0\xE6\x8D\xAE\xE5\xBA\x93\xE6\x96\x87\xE4\xBB\xB6\x20\x63\x6F\x6C\x6C\x69\x6E\x73\x2E\x64\x62"));
+    }
 }
 
 Shanbay::~Shanbay()
@@ -20,7 +28,14 @@ Shanbay::~Shanbay()
 
 ShanbayWordInfo Shanbay::getWordInfo(const QString &word)
 {
+    if (data_.contains(word)) return data_.value(word);
+    ShanbayWordInfo localwordInfo;
+    if (shanbayDB_.isOpen()) {
+        localwordInfo = getWordInfoFromSQLite3(word);
+    }
+    if (!localwordInfo.word.isEmpty()) return localwordInfo;
     ShanbayWordInfo wordInfo;
+
     wordInfo.word = word;
     wordInfo.pron = "nit";
     wordInfo.cn;
@@ -60,7 +75,34 @@ ShanbayWordInfo Shanbay::getWordInfo(const QString &word)
     wordInfo.pron = data["pron"].toString();
     qDebug() << wordInfo.pron << wordInfo.pron.toUtf8().toHex();
     wordInfo.audio = data["us_audio"].toString();
+    data_[word] = wordInfo;
 
     return wordInfo;
+}
+
+ShanbayWordInfo Shanbay::getWordInfoFromSQLite3(const QString &word)
+{
+    ShanbayWordInfo info;
+    QSqlQuery query(shanbayDB_);
+//    QString sql = QString("select * from zhmultiwords where word='%1'").arg(word);
+    query.prepare("select json from words where word=:word");
+    query.bindValue(":word",word);
+    if (query.exec()) {
+        while (query.next()) {
+            QString json = query.value("json").toString();
+            QtJson::JsonObject data = QtJson::parse(json).toMap();
+            info.cn = data["definition"].toString();
+            info.en = data["en_definition"].toString();
+            info.word = data["content"].toString();
+            info.pron = data["pron"].toString();
+            qDebug() << info.pron << info.pron.toUtf8().toHex();
+            info.audio = data["us_audio"].toString();
+            data_[word] = info;
+        }
+
+    }else {
+        qDebug() << "sql exec ERROR"<< query.lastError().text()<<query.lastQuery();
+    }
+    return info;
 }
 

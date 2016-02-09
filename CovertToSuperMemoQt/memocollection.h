@@ -12,6 +12,7 @@ public:
     void addMemoUnit(const MemoUnit& unit);
     void addMemoUnitList(const QList<MemoUnit>& list);
 
+    void shuffle();
     bool toXmlFile(const QString& toFile);
     QString pronToHtml(const QString &pron);
 
