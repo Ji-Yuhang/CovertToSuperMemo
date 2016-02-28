@@ -70,7 +70,17 @@ ShanbayWordInfo Shanbay::getWordInfo(const QString &word)
     QtJson::JsonObject obj = QtJson::parse(QString::fromUtf8(json)).toMap();
     QtJson::JsonObject data = obj["data"].toMap();
     wordInfo.cn = data["definition"].toString();
-    wordInfo.en = data["en_definition"].toString();
+    QtJson::JsonObject endefMap = data["en_definitions"].toMap();
+    for (QtJson::JsonObject::iterator it = endefMap.begin(); it != endefMap.end(); ++it) {
+        QString key = it.key();
+        QStringList list;
+        QtJson::JsonArray array = it.value().toList();
+        for (QtJson::JsonArray::iterator it2 = array.begin(); it2 != array.end(); ++it2) {
+            QString de = it2->toString();
+            list.append(de);
+        }
+        wordInfo.enMap.insert(key,list);
+    }
     wordInfo.word = data["content"].toString();
     wordInfo.pron = data["pron"].toString();
     qDebug() << wordInfo.pron << wordInfo.pron.toUtf8().toHex();
@@ -92,8 +102,17 @@ ShanbayWordInfo Shanbay::getWordInfoFromSQLite3(const QString &word)
             QString json = query.value("json").toString();
             QtJson::JsonObject data = QtJson::parse(json).toMap();
             info.cn = data["definition"].toString();
-            info.en = data["en_definition"].toString();
-            info.word = data["content"].toString();
+            QtJson::JsonObject endefMap = data["en_definitions"].toMap();
+            for (QtJson::JsonObject::iterator it = endefMap.begin(); it != endefMap.end(); ++it) {
+                QString key = it.key();
+                QStringList list;
+                QtJson::JsonArray array = it.value().toList();
+                for (QtJson::JsonArray::iterator it2 = array.begin(); it2 != array.end(); ++it2) {
+                    QString de = it2->toString();
+                    list.append(de);
+                }
+                info.enMap.insert(key,list);
+            }            info.word = data["content"].toString();
             info.pron = data["pron"].toString();
             qDebug() << info.pron << info.pron.toUtf8().toHex();
             info.audio = data["us_audio"].toString();

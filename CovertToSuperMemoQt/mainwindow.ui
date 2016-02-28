@@ -58,6 +58,11 @@ border-style:none;
         <string>随机选择</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>扇贝解释</string>
+       </property>
+      </item>
      </widget>
     </item>
     <item row="0" column="1">
@@ -74,7 +79,7 @@ border-style:none;
      <x>0</x>
      <y>0</y>
      <width>642</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

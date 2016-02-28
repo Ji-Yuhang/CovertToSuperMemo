@@ -9,8 +9,8 @@ struct ShanbayWordInfo {
     QString pron;
     QString audio;
     QString cn;
-    QString en;
-    QString sentence;
+    QMap<QString, QStringList> enMap;
+//    QString sentence;
 };
 
 class Shanbay : public QObject

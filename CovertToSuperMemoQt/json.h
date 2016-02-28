@@ -25,6 +25,8 @@
 
 #include <QVariant>
 #include <QString>
+#include <QList>
+#include <QVariantList>
 
 
 /**

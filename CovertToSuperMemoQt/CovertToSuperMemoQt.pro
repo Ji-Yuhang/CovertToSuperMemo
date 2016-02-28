@@ -24,7 +24,11 @@ SOURCES += main.cpp\
     remotesupermemoinfo.cpp \
     memounit.cpp \
     memocollection.cpp \
-    collinswordtomemo.cpp
+    collinswordtomemo.cpp \
+    shanbayexplain.cpp \
+    droplabel.cpp \
+    shanbaywordtomemo.cpp \
+    covertstrategy.cpp
 
 HEADERS  += mainwindow.h \
     shanbay.hxx \
@@ -36,11 +40,16 @@ HEADERS  += mainwindow.h \
     remotesupermemoinfo.h \
     memounit.h \
     memocollection.h \
-    collinswordtomemo.h
+    collinswordtomemo.h \
+    shanbayexplain.h \
+    droplabel.h \
+    shanbaywordtomemo.h \
+    covertstrategy.h
 
 FORMS    += mainwindow.ui \
     randomwords.ui \
-    filewords.ui
+    filewords.ui \
+    shanbayexplain.ui
 
 win32 {
 #    LIBS += -lshell32
