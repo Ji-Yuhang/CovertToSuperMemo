@@ -12,6 +12,7 @@
 #include <QNetworkReply>
 #include <QEventLoop>
 #include <QDir>
+#include <QTimer>
 #include "collins.h"
 #include <QDebug>
 #include "collinswordtomemo.h"
@@ -123,8 +124,7 @@ QString highlightWord(const QString& sentence, const QString& word/*, Qt::CaseSe
 
 bool Util::covertToSuperMemoXML(const QStringList &wordList, const QString &toFile, QProgressBar *bar, QLabel *label)
 {
-    EnExampleToEnJieshi straregy;
-    CollinsWordToMemo collinsToMemo(&straregy);
+    CollinsWordToMemo collinsToMemo(new EnExampleToEnJieshi);
     collinsToMemo.addWordList(wordList);
     QSharedPointer<MemoCollection> collection = collinsToMemo.makeCollection();
 
@@ -352,6 +352,8 @@ void Util::downloadFile(const QString &uri, const QString &path)
     QNetworkReply *reply = manager.get(QNetworkRequest(_url));
     QEventLoop loop;
     connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    QTimer::singleShot(3000, &loop, SLOT(quit()));
+
     connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), &loop, SLOT(quit()));
     loop.exec();
     if (reply->error() != QNetworkReply::NoError) {

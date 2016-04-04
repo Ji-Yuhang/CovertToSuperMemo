@@ -6,6 +6,7 @@
 #include <QTimer>
 #include "filewords.h"
 #include "randomwords.h"
+#include "shanbayexplain.h"
 namespace Ui {
 class MainWindow;
 }
@@ -26,6 +27,7 @@ private:
     Ui::MainWindow *ui;
     FileWords fileWords_;
     RandomWords randomWords_;
+    ShanbayExplain shanbayExplain_;
 };
 
 #endif // MAINWINDOW_H

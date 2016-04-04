@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->listWidget->setFocusPolicy(Qt::NoFocus);
     ui->stackedWidget->insertWidget(0,&fileWords_);
     ui->stackedWidget->insertWidget(1,&randomWords_);
+    ui->stackedWidget->insertWidget(2,&shanbayExplain_);
+
     randomWords_.initCollinsLabel();
 
 }
