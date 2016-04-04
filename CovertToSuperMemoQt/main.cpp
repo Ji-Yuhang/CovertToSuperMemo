@@ -14,30 +14,30 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 #endif
-//    QPixmap pic;
-//    pic.load("./sang.png");
-//    a.setWindowIcon(QIcon(pic));
+    //    QPixmap pic;
+    //    pic.load("./sang.png");
+    //    a.setWindowIcon(QIcon(pic));
 
     try {
-    Shanbay shanbay;    // singleton
-    Collins collins;
-    MainWindow w;
-    qDebug() << "will show MainWindow";
-    w.show();
+        Shanbay shanbay;    // singleton
+        Collins collins;
+        MainWindow w;
+        qDebug() << "will show MainWindow";
+        w.show();
 
-    QString fromFile;// = "/home/jiyuhang/myjianguoyun/nce/one.txt";
-    QString toFile = "out.txt";
-    QStringList argus = QApplication::arguments();
-    if (argus.size() >= 2) {
-        fromFile = argus[1];
-    }
-    if (argus.size() >= 3) {
-        toFile = argus[2];
+        QString fromFile;// = "/home/jiyuhang/myjianguoyun/nce/one.txt";
+        QString toFile = "out.txt";
+        QStringList argus = QApplication::arguments();
+        if (argus.size() >= 2) {
+            fromFile = argus[1];
+        }
+        if (argus.size() >= 3) {
+            toFile = argus[2];
 
-    }
-//    if (!fromFile.isEmpty()) Util::covertToSuperMemo(fromFile, toFile);
+        }
+        //    if (!fromFile.isEmpty()) Util::covertToSuperMemo(fromFile, toFile);
 
-    return a.exec();
+        return a.exec();
     } catch (std::exception &e) {
         qDebug() <<e.what();
 
