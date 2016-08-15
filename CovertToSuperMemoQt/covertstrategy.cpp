@@ -78,7 +78,7 @@ QString CovertHelper::multiSpace(int count)
     return temp;
 }
 
-MemoUnit EnExampleToEnJieshi::covertToMemoUnit(const CollinsInfo &collinsInfo)
+QList<MemoUnit> EnExampleToEnJieshi::covertToMemoUnit(const CollinsInfo &collinsInfo)
 {
 
     MemoUnit unit;
@@ -182,7 +182,9 @@ MemoUnit EnExampleToEnJieshi::covertToMemoUnit(const CollinsInfo &collinsInfo)
     }
     sound.setSource(sourceUrl);
     unit.setSound(sound);
-    return unit;
+    QList<MemoUnit> list;
+    list.append(unit);
+    return list;
 }
 
 MemoUnit EnWordToShanbayCN::covertToMemoUnit(const ShanbayWordInfo &shanbayInfo)
@@ -239,5 +241,57 @@ MemoUnit EnWordToShanbayCN::covertToMemoUnit(const ShanbayWordInfo &shanbayInfo)
     }
     sound.setSource(sourceUrl);
     unit.setSound(sound);
+
     return unit;
+}
+
+QList<MemoUnit> EnExampleToZhExample::covertToMemoUnit(const CollinsInfo &collinsInfo)
+{
+    QList<MemoUnit> list;
+
+
+    QString br = "<br/>";
+    QString word = collinsInfo.word;
+    QStringList enzhlist;
+    QMap<QString,QString> exampleEnZh = collinsInfo.example; //<en,zh> pair
+    for (QMap<QString,QString>::iterator kv = exampleEnZh.begin(); kv != exampleEnZh.end(); ++kv) {
+        QString en = kv.key();
+        QString zh = kv.value();
+        QString enzh = highlightWord(en,word) + multiSpace(10) + zh;
+
+        QString question = highlightWord(en,word);
+        QString answer;
+        ShanbayWordInfo wordInfo = Shanbay::instance()->getWordInfo(word);
+
+        QString utf16pron = pronToHtml(wordInfo.pron);
+        qDebug() << utf16pron;
+        QString pron = " [ " +utf16pron + " ] ";
+        answer = zh + br
+                + highlightWord(collinsInfo.sentences, word) + br
+                + pron + multiSpace(10) + highlightWord(word,word) + multiSpace(10) + collinsInfo.cn + br
+                + collinsInfo.st + multiSpace(10) + collinsInfo.grammer + multiSpace(10) + collinsInfo.explain + br
+                + collinsInfo.usagenote;
+
+        MemoUnit unit;
+        unit.setQuestion(Question(question));
+        unit.setAnswer(Answer(answer));
+        Sound sound;
+        QString audio = wordInfo.audio;
+        int audioIndex = audio.lastIndexOf("/");
+        audio = audio.mid(audioIndex + 1);
+        QString url = "[SecondaryStorage]\\"+ audio;
+
+        sound.setUrl(url);
+        sound.setName("");
+        sound.setText(pron);
+        QUrl sourceUrl = wordInfo.audio;
+        QFileInfo fileinfo("./shanbaymp3/" + audio );
+        if (fileinfo.exists()) {
+            sourceUrl = QUrl::fromLocalFile("./shanbaymp3/" + audio );
+        }
+        sound.setSource(sourceUrl);
+        unit.setSound(sound);
+        list.append(unit);
+    }
+    return list;
 }

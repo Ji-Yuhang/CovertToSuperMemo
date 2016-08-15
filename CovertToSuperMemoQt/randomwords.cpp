@@ -16,7 +16,7 @@ RandomWords::RandomWords(QWidget *parent) :
     ui->setupUi(this);
     connect(ui->randomButton, SIGNAL(clicked()), this, SLOT(onRandomButtonClicked()));
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onCollinsStarChanged(int)));
-    remoteSupermemoInfo_.initInfoList();
+//    remoteSupermemoInfo_.initInfoList();
 }
 
 RandomWords::~RandomWords()

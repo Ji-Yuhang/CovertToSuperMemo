@@ -34,8 +34,8 @@ QSharedPointer<MemoCollection> CollinsWordToMemo::makeCollection()
     Q_FOREACH(const QString& word, wordList_) {
         QList<CollinsInfo> infoList = COLLINS->zhCollins(word);
         Q_FOREACH(const CollinsInfo& info, infoList) {
-            MemoUnit unit = covertStrategy_->covertToMemoUnit(info);
-            collection->addMemoUnit(unit);
+            QList<MemoUnit> units = covertStrategy_->covertToMemoUnit(info);
+            collection->addMemoUnitList(units);
         }
     }
     return collection;

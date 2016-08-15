@@ -124,7 +124,7 @@ QString highlightWord(const QString& sentence, const QString& word/*, Qt::CaseSe
 
 bool Util::covertToSuperMemoXML(const QStringList &wordList, const QString &toFile, QProgressBar *bar, QLabel *label)
 {
-    CollinsWordToMemo collinsToMemo(new EnExampleToEnJieshi);
+    CollinsWordToMemo collinsToMemo(new EnExampleToZhExample);//EnExampleToEnJieshi
     collinsToMemo.addWordList(wordList);
     QSharedPointer<MemoCollection> collection = collinsToMemo.makeCollection();
 

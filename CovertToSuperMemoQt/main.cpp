@@ -6,6 +6,7 @@
 #include "util.hxx"
 #include "shanbay.hxx"
 #include "collins.h"
+#include <QDir>
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -18,6 +19,9 @@ int main(int argc, char *argv[])
     //    pic.load("./sang.png");
     //    a.setWindowIcon(QIcon(pic));
 
+    qDebug() << "current path"<< QDir::currentPath();
+    QDir::setCurrent(QDir::currentPath() + "/../../../");
+    qDebug() << "current path in mac"<< QDir::currentPath();
     try {
         Shanbay shanbay;    // singleton
         Collins collins;

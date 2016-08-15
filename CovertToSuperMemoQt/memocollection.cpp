@@ -160,6 +160,7 @@ bool MemoCollection::toXmlFile(const QString &toFile)
     outStream.setCodec("UTF-8");
     document.save(outStream,4,QDomNode::EncodingFromTextStream);
     outFile.close();
+    qDebug() << "toxml success";
     return true;
 
 }

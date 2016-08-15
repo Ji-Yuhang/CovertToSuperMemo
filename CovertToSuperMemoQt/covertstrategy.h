@@ -15,7 +15,7 @@ class CovertStrategy : public CovertHelper{
 };
 class CollinsCovertStrategy : public CovertStrategy{
 public:
-    virtual MemoUnit covertToMemoUnit(const CollinsInfo& collinsInfo) = 0;
+    virtual QList<MemoUnit> covertToMemoUnit(const CollinsInfo& collinsInfo) = 0;
 };
 class ShanbayCovertStrategy : public CovertStrategy {
 public:
@@ -29,9 +29,13 @@ public:
 class EnExampleToEnJieshi : public CollinsCovertStrategy {
 public:
 
-    virtual MemoUnit covertToMemoUnit(const CollinsInfo& collinsInfo);
+    virtual QList<MemoUnit> covertToMemoUnit(const CollinsInfo& collinsInfo);
+};
 
+class EnExampleToZhExample : public CollinsCovertStrategy {
+public:
 
+    virtual QList<MemoUnit> covertToMemoUnit(const CollinsInfo& collinsInfo);
 };
 
 #endif // COVERTSTRATEGY_H
