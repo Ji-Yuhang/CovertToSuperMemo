@@ -13,12 +13,17 @@ class CollinsWordToMemo
   end
   
   def add_word_list(words)
-    @word_list << words
+    if words.is_a? Array
+      @word_list += words
+    else
+      @word_list << words
+    end
   end
 
   def make_collection
     collection = Collection.new
     @word_list.each do |word|
+      collection.add_memo_unit_list @strategy.covert_to_memo_unit(word)
 =begin
       infos = Collins.zhCollins word
       infos.each do |info|

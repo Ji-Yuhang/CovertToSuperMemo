@@ -1,0 +1,10 @@
+source 'https://gems.ruby-china.org'
+
+gem 'nokogiri'
+gem 'awesome_print'
+gem 'activerecord'
+gem 'activesupport'
+gem 'pg', '~> 0.18'
+gem 'pry'
+gem 'pry-byebug'
+

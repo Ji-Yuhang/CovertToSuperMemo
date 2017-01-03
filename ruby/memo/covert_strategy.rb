@@ -1,4 +1,6 @@
 require_relative 'unit'
+require 'erb'
+require 'active_support'
 
 class CovertHelper
   def highlight_word(sentence, word)
@@ -14,7 +16,7 @@ end
 # Import:
 # covert Word to Memo Unit
 class CovertStrategy < CovertHelper
-
+  include ::ActiveSupport::Inflector
 end
 
 # by Collins dictionary
@@ -37,7 +39,33 @@ class EnWordToShanbayCN < ShanbayCovertStrategy
 end
 
 class EnExampleToEnExplaionCN < CollinsCovertStrategy
-  def covert_to_memo_unit(collins)
+  def covert_to_memo_unit(word)
+    # render erb
+    
+    question =  Question.new
+    answer =  Answer.new
+    sound = Sound.new
+
+    @word = word
+
+    question.html= "<b>#{word}</b>"
+    answer.html= "<b>#{word}</b>"
+    sound.name= "<b>#{word}</b>"
+
+    
+    question_erb = ERB.new(File.read("#{underscore(self.class.to_s)}_question.html.erb"))
+    question.html = question_erb.result binding
+
+    answer_erb = ERB.new(File.read("#{underscore(self.class.to_s)}_answer.html.erb"))
+    answer.html = answer_erb.result binding
+
+
+
+    unit = Unit.new
+    unit.question = question
+    unit.answer = answer
+    unit.sound = sound
+    return unit
   end
 end
 
