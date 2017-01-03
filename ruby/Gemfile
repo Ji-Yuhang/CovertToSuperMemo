@@ -7,4 +7,5 @@ gem 'activesupport'
 gem 'pg', '~> 0.18'
 gem 'pry'
 gem 'pry-byebug'
+gem 'sqlite3'
 

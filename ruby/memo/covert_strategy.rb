@@ -1,15 +1,34 @@
 require_relative 'unit'
 require 'erb'
+require 'open-uri'
 require 'active_support'
+require_relative '../thesaurus'
+require_relative '../shanbay_local'
 
 class CovertHelper
   def highlight_word(sentence, word)
   end
   def cloze_word(sentence, word)
   end
-  def pron_to_html(pron)
-  end
   def multi_space(count)
+  end
+
+  def cn_word(word)
+    data = ShanbayDB::local_data word
+    #data = ShanbayHttp::http_data word if data.nil?
+    cndef = data["cn_definition"]["defn"]
+    word = data["content"]
+    return cndef
+  end
+
+  def download_file(file_name,url)
+    open(file_name, 'wb') do |file|
+      file << open(url).read
+    end
+  end
+
+  def pron_to_html(pron)
+    pron.unpack("U*").map{|c| "&##{c.to_s};"}.join
   end
 end
 
@@ -47,11 +66,29 @@ class EnExampleToEnExplaionCN < CollinsCovertStrategy
     sound = Sound.new
 
     @word = word
+    #@thesaurus = Thesaurus.thesaurus word
+
+    @data = ShanbayDB::local_data word
+    #@data = ShanbayHttp::http_data word if @data.nil?
+    @cndef = @data["cn_definition"]["defn"]
+    @endef = @data["en_definition"]
+    @word = @data["content"]
+    @pron = pron_to_html(@data["pron"])
+    @thesaurus = @data["thesaurus"]
+    @audio = @data["us_audio"]
+
 
     question.html= "<b>#{word}</b>"
     answer.html= "<b>#{word}</b>"
-    sound.name= "<b>#{word}</b>"
 
+    audio_name = @audio.match(/([\w%-]+).mp3$/)[0]
+    sound.name = ""
+    sound.text = @pron
+    sound.url = "[SecondaryStorage]\\" + audio_name
+    sound.source = @audio
+
+    #download_file(audio_name, @audio)
+    
     
     question_erb = ERB.new(File.read("#{underscore(self.class.to_s)}_question.html.erb"))
     question.html = question_erb.result binding

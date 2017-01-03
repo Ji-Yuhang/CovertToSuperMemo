@@ -9,7 +9,7 @@ class Answer < HtmlHelper
 end
 
 class Sound
-  attr_accessor :test
+  attr_accessor :text
   attr_accessor :url
   attr_accessor :name
   attr_accessor :source

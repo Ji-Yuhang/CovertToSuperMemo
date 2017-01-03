@@ -5,6 +5,13 @@ class Collection
     @units = [] # vector<Unit>
   end
 
+  def download_file(file_name,url)
+    puts "download_file #{file_name}"
+    open(file_name, 'wb') do |file|
+      file << open(url).read
+    end
+  end
+
   def add_memo_unit(unit)
     @units << unit
   end
@@ -25,6 +32,13 @@ class Collection
 
   def to_xml_file(file)
     #TODO: stream_out to xml file
+    dirname = file.match(/([\w%-]+).xml/)[1]
+    dirpath = "#{dirname}_files/Elements" 
+
+
+    Dir.mkdir "#{dirname}_files"
+    Dir.mkdir dirpath
+
     iid = 2
     builder = Nokogiri::XML::Builder.new :encoding => 'UTF-8' do |xml|
       xml.SuperMemoCollection {
@@ -43,7 +57,14 @@ class Collection
               xml.Content {
                 xml.Question unit.question.html
                 xml.Answer unit.answer.html
-                # xml.sound {}
+                xml.Sound {
+                  audio_name = unit.sound.url.match(/([\w%]+).mp3$/)[0]
+                  download_file(dirpath + "/" + audio_name,unit.sound.source )
+                  xml.Text unit.sound.text
+                  xml.URL unit.sound.url
+                  xml.Name unit.sound.name
+                  # copy source
+                }
               }
               
             } # unit element

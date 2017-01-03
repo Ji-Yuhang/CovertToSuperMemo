@@ -5,7 +5,7 @@ def main
     #app = Qt::Application.new ARGV
 
     collins1 = "/home/jiyuhang/document/collins1_list/collins_1_list_1.txt"
-    wordlist = File.read(collins1).split("\n")
+    wordlist = File.read(collins1).split("\n")[0,10]
     #wordlist = "a b c d e f g"
     collins2Memo = CollinsWordToMemo.new EnExampleToEnExplaionCN.new
     collins2Memo.add_word_list wordlist
