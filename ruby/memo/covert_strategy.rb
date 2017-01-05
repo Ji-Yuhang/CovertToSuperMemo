@@ -4,6 +4,7 @@ require 'open-uri'
 require 'active_support'
 require_relative '../thesaurus'
 require_relative '../shanbay_local'
+require_relative '../shanbay'
 
 class CovertHelper
   def highlight_word(sentence, word)
@@ -15,10 +16,15 @@ class CovertHelper
 
   def cn_word(word)
     data = ShanbayDB::local_data word
-    #data = ShanbayHttp::http_data word if data.nil?
-    cndef = data["cn_definition"]["defn"]
-    word = data["content"]
-    return cndef
+    puts word
+    data = ShanbayHttp::http_data word if data.nil?
+    if data
+      cndef = data["cn_definition"]["defn"] if data["cn_definition"]
+      word = data["content"]
+      return cndef
+    else
+      return ''
+    end
   end
 
   def download_file(file_name,url)
@@ -70,6 +76,8 @@ class EnExampleToEnExplaionCN < CollinsCovertStrategy
 
     @data = ShanbayDB::local_data word
     #@data = ShanbayHttp::http_data word if @data.nil?
+    return nil unless @data
+    return nil unless @data["cn_definition"]
     @cndef = @data["cn_definition"]["defn"]
     @endef = @data["en_definition"]
     @word = @data["content"]

@@ -1,33 +1,38 @@
 #!/usr/bin/env ruby
 require "open-uri"
 require "json"
+require 'uri'
 #require "iconv"
 require_relative "shanbay_local"
 
 module ShanbayHttp
-    def http_data(word)
-      puts "ShanbayHttp::http_data #{data}"
-        getwordui = "https://api.shanbay.com/bdc/search/?word=#{word}"
-        open( getwordui) do |io|
-            jsonstr =  io.read
-            json = JSON.parse(jsonstr)
-            data = json["data"]
-            return data
-        end
-        return nil
+  def http_data(word)
+    puts "ShanbayHttp::http_data #{word}"
+    begin
+      getwordui = URI.escape("https://api.shanbay.com/bdc/search/?word=#{word}")
+      open( getwordui) do |io|
+        jsonstr =  io.read
+        json = JSON.parse(jsonstr)
+        data = json["data"]
+        return data
+      end
+    rescue
+      return nil
     end
-    def local_http_data(word)
-        getwordui = "http://localhost/shanbayword/?word=#{word}"
-        open( getwordui) do |io|
-            jsonstr =  io.read
-            #Iconv.conv('gbk','utf-8',result)
-            json = JSON.parse(jsonstr)
-            #data = json["data"]
-            return json
-        end
-        return nil
+    return nil
+  end
+  def local_http_data(word)
+    getwordui = "http://localhost/shanbayword/?word=#{word}"
+    open( getwordui) do |io|
+      jsonstr =  io.read
+      #Iconv.conv('gbk','utf-8',result)
+      json = JSON.parse(jsonstr)
+      #data = json["data"]
+      return json
     end
-    module_function :http_data, :local_http_data
+    return nil
+  end
+  module_function :http_data, :local_http_data
 end
 
 def parse_shanbay_data(data)

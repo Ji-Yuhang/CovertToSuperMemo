@@ -20,7 +20,7 @@
       <%= noun + ":"%>
       <%  list_list.each_with_index do |list,index| %>
         <div>
-          <%= "    #{index}. #{list.map{|w| "<b>#{w}</b><i>(#{cn_word(word)})</i>"}.join(' -> ')}"%>
+          <%= "    #{index}. #{list.map{|w| "<b>#{w}</b><i>(#{cn_word(w)})</i>"}.join(' -> ')}"%>
         </div>
       <% end%> 
     </div>

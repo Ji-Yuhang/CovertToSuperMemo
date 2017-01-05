@@ -23,7 +23,8 @@ class CollinsWordToMemo
   def make_collection
     collection = Collection.new
     @word_list.each do |word|
-      collection.add_memo_unit_list @strategy.covert_to_memo_unit(word)
+      units = @strategy.covert_to_memo_unit(word)
+      collection.add_memo_unit_list units if units
 =begin
       infos = Collins.zhCollins word
       infos.each do |info|
