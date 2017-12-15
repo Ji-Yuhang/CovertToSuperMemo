@@ -5,6 +5,7 @@ require 'active_support'
 require_relative '../thesaurus'
 require_relative '../shanbay_local'
 require_relative '../shanbay'
+require_relative '../bgl'
 
 class CovertHelper
   def highlight_word(sentence, word)
@@ -15,6 +16,7 @@ class CovertHelper
   end
 
   def cn_word(word)
+    word.gsub!(/\s\(.*$/, '')
     data = ShanbayDB::local_data word
     puts word
     data = ShanbayHttp::http_data word if data.nil?
@@ -84,6 +86,9 @@ class EnExampleToEnExplaionCN < CollinsCovertStrategy
     @pron = pron_to_html(@data["pron"])
     @thesaurus = @data["thesaurus"]
     @audio = @data["us_audio"]
+
+    @bgl = Bgl.bgl(@word)
+    a, @yinjie, c = @bgl
 
 
     question.html= "<b>#{word}</b>"

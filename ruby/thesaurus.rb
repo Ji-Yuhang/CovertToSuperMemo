@@ -8,7 +8,11 @@ class Thesaurus
     #puts word
     #puts @@thesaurus.size
     #puts @@thesaurus.include? word
-    return @@thesaurus[word]
+    list = @@thesaurus[word]
+    # list = list.map do | ws |
+    #   ws.map{|w| w.gsub(/\s\(.*$/, '')}
+    # end
+    return list
   end
 
   def self.all_thesaurus
