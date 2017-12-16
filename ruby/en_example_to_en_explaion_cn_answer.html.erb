@@ -1,12 +1,11 @@
-<br/>
 <%if @yinjie.present? %>
   <i><%= @yinjie %></i>&nbsp;&nbsp;&nbsp;
 <% end%>
 
-<i><%= @pron %> </i><b><%= @cndef %> </b>
+<%= @cndef %> </b>
 <br/>
-<i><%= @pron_html %> </i>
-<b><%= @endef %> </b>
+<i><%= @pron_html %> </i>&nbsp;&nbsp;&nbsp;
+<i><%= @endef %> </i>
 
 <%if @thesaurus.present? %>
   <% @thesaurus.each do | noun, list_list |%> 
