@@ -36,6 +36,7 @@ class CovertHelper
   end
 
   def pron_to_html(pron)
+    return pron if pron.include?('&#') || pron.include?('\u')
     # return pron # just test
     pron.unpack("U*").map{|c| "&##{c.to_s};"}.join
   end
