@@ -36,6 +36,7 @@ class CovertHelper
   end
 
   def pron_to_html(pron)
+    # return pron # just test
     pron.unpack("U*").map{|c| "&##{c.to_s};"}.join
   end
 end
@@ -83,7 +84,8 @@ class EnExampleToEnExplaionCN < CollinsCovertStrategy
     @cndef = @data["cn_definition"]["defn"]
     @endef = @data["en_definition"]
     @word = @data["content"]
-    @pron = pron_to_html(@data["pron"])
+    @pron_html = pron_to_html(@data["pron"])
+    @pron = @data["pron"]
     @thesaurus = @data["thesaurus"]
     @audio = @data["us_audio"]
 
