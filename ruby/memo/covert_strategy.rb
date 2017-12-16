@@ -83,7 +83,7 @@ class EnExampleToEnExplaionCN < CollinsCovertStrategy
     return nil unless @data
     return nil unless @data["cn_definition"]
     @cndef = @data["cn_definition"]["defn"]
-    @endef = @data["en_definition"]
+    @endef = @data["en_definition"]["defn"]
     @word = @data["content"]
     @pron_html = pron_to_html(@data["pron"])
     @pron = @data["pron"]
