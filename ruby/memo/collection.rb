@@ -7,8 +7,13 @@ class Collection
 
   def download_file(file_name,url)
     puts "download_file #{file_name}"
+    return if File.exist?(file_name)
+    begin
     open(file_name, 'wb') do |file|
       file << open(url).read
+    end
+    rescue
+      puts 'download file error'
     end
   end
 
