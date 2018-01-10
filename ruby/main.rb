@@ -5,7 +5,7 @@ def main
     #app = Qt::Application.new ARGV
 
     # collins1 = "/home/jiyuhang/Documents/collins1_list/collins_1_list_1.txt"
-    collins1 = "lists/list_12.txt"
+    collins1 = "lists/list_13.txt"
     wordlist = File.read(collins1).split("\n")
     # wordlist = File.read(collins1).split("\n")[0,5]
     #wordlist = "a b c d e f g"
