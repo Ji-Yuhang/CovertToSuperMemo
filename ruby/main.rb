@@ -5,8 +5,12 @@ def main
     #app = Qt::Application.new ARGV
 
     # collins1 = "/home/jiyuhang/Documents/collins1_list/collins_1_list_1.txt"
-    collins1 = "lists/list_15.txt"
-    wordlist = File.read(collins1).split("\n")
+    # collins1 = "lists/list_15.txt"
+    collins1 = "lists/word_list_of62.txt"
+
+    # wordlist = File.read(collins1).split("\n")
+    wordlist = File.read(collins1).lines.map(&:strip)
+    # wordlist.shuffle!
     # wordlist = File.read(collins1).split("\n")[0,5]
     #wordlist = "a b c d e f g"
     collins2Memo = CollinsWordToMemo.new EnExampleToEnExplaionCN.new

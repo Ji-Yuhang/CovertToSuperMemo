@@ -9,12 +9,20 @@ class Collection
     puts "download_file #{file_name}"
     return if File.exist?(file_name)
     begin
-    open(file_name, 'wb') do |file|
-      file << open(url).read
-    end
+      # supermemo-20180303-222102_files/Elements/degenerate.mp3
+      audio_name = file_name.scan(/\/(\w+\.mp3)/)[0][0]
+      if File.exist?("#{ENV['HOME']}/vimrc/shanbaymp3/#{audio_name}")
+        FileUtils.copy("#{ENV['HOME']}/vimrc/shanbaymp3/#{audio_name}", file_name)
+      end
+      if !File.exist?(file_name)
+        open(file_name, 'wb') do |file|
+          file << open(url).read
+        end
+      end
     rescue
       puts 'download file error'
     end
+
   end
 
   def add_memo_unit(unit)

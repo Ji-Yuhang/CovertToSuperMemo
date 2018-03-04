@@ -45,3 +45,24 @@ bin/CovertToSuperMemoQt.app
 
 #ruby
 .idea
+*.db
+supermemo-20171215-111228_files/
+supermemo-20171215-114418_files/
+supermemo-20171215-115738_files/
+supermemo-20171215-121609_files/
+supermemo-20171216-091812_files/
+supermemo-20171216-092135_files/
+supermemo-20171216-092703_files/
+supermemo-20171216-092800_files/
+supermemo-20171217-063008_files/
+supermemo-20171217-063558_files/
+supermemo-20171218-120247_files/
+supermemo-20171220-221916_files/
+supermemo-20171222-000736_files/
+supermemo-20171222-010232_files/
+supermemo-20171226-105201_files/
+supermemo-20180103-092348_files/
+supermemo-20180104-225553_files/
+supermemo-20180111-070806_files/
+supermemo-20180112-095647_files/
+supermemo-20180115-061148_files/
