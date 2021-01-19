@@ -15,3 +15,5 @@ Shanbay网有网络接口可以输入单词，查看单词的意思。
 5. 利用SuperMemo背单词
 
 
+# install
+`gem install pg -v '0.21.0' --  --with-opt-dir='/usr/local/Cellar/libpq/12.4/'`
